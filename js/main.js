@@ -10,6 +10,7 @@ const heroScrollCue = document.querySelector(".hero-scroll-cue");
 const heroTransition = document.querySelector(".hero-transition");
 const emotionalTransition = document.querySelector(".emotional-transition");
 const emotionalSection = document.querySelector(".full-bleed-image");
+const emotionalIntro = document.querySelector(".window-line-intro");
 const emotionalLineOne = document.querySelector(".window-line-1");
 const emotionalLineTwo = document.querySelector(".window-line-2");
 const headerSectionLinks = document.querySelectorAll(".header-links a");
@@ -332,7 +333,8 @@ const updateEmotionalWindow = () => {
   const caption = emotionalSection.querySelector(".full-bleed-caption p");
 
   document.body.classList.toggle("emotional-active", isVisible);
-  emotionalLineOne?.classList.toggle("is-visible", progress > 0.15);
+  emotionalIntro?.classList.toggle("is-visible", progress > 0.08);
+  emotionalLineOne?.classList.toggle("is-visible", progress > 0.22);
   emotionalLineTwo?.classList.toggle("is-visible", progress > 0.4);
   caption?.style.setProperty(
     "--emotional-caption-y",
@@ -456,6 +458,7 @@ brandLink?.addEventListener("click", (event) => {
     emotionalTransitionObserver.unobserve(emotionalTransition);
   }
 
+  emotionalIntro?.classList.remove("is-visible");
   emotionalLineOne?.classList.remove("is-visible");
   emotionalLineTwo?.classList.remove("is-visible");
   document.body.classList.remove("emotional-active");
@@ -618,29 +621,47 @@ const ambassadorGallery = document.querySelector("[data-ambassador-gallery]");
 const ambassadorDots = document.querySelectorAll("[data-ambassador-index]");
 const ambassadorPrev = document.querySelector("[data-ambassador-prev]");
 const ambassadorNext = document.querySelector("[data-ambassador-next]");
+const ambassadorName = document.querySelector("[data-ambassador-name]");
+const ambassadorHandle = document.querySelector("[data-ambassador-handle]");
+const ambassadorDescription = document.querySelector("[data-ambassador-description]");
+const ambassadorLink = document.querySelector("[data-ambassador-link]");
+const ambassadorModal = document.querySelector("[data-ambassador-modal]");
+const ambassadorModalImage = document.querySelector("[data-ambassador-modal-image]");
+const ambassadorModalName = document.querySelector("[data-ambassador-modal-name]");
+const ambassadorModalHandle = document.querySelector("[data-ambassador-modal-handle]");
+const ambassadorModalRole = document.querySelector("[data-ambassador-modal-role]");
+const ambassadorModalStory = document.querySelector("[data-ambassador-modal-story]");
+const ambassadorModalLink = document.querySelector("[data-ambassador-modal-link]");
+const ambassadorModalDots = document.querySelector("[data-ambassador-modal-dots]");
+const ambassadorModalPrev = document.querySelector("[data-ambassador-modal-prev]");
+const ambassadorModalNext = document.querySelector("[data-ambassador-modal-next]");
+const ambassadorModalCloseButtons = document.querySelectorAll("[data-ambassador-modal-close]");
 const ambassadorProfiles = [
   {
     layout: "amamos",
     name: "Amamos Cafés",
     handle: "@amamoscafes",
-    platform: "Instagram",
-    description: "Pareja viajera especializada en café de especialidad alrededor del mundo.",
+    description: "Viajes, café de especialidad y rituales compartidos.",
+    role: "Viajeros y amantes del café de especialidad.",
+    story: "Recorren nuevos paisajes buscando sabores, encuentros y pequeñas pausas para compartir.",
     profileUrl: "https://www.instagram.com/amamoscafes/",
     images: [
       ["assets/ambassador-amamos-5.png", "Pareja caminando hacia un lago entre montañas"],
       ["assets/ambassador-amamos-2.png", "Pareja de excursionistas junto a un lago de montaña"],
       ["assets/ambassador-amamos-1.jpg", "Granos de café recién cosechados"],
       ["assets/ambassador-amamos-3.jpg", "Minipresso y café frente a un paisaje al amanecer"],
+      ["assets/ambassador-amamos-4.jpg", "Hamaca frente a un paisaje de cafetales"],
       ["assets/ambassador-amamos-6.jpg", "Minipresso lista para usar durante un viaje"],
     ],
   },
   {
     layout: "breanna",
     name: "Breanna Wilson",
-    handle: "@breannajwilson",
-    platform: "Instagram",
-    description: "Escritora y aventurera que lleva el café a rutas remotas y viajes sin mapa.",
-    profileUrl: "https://www.instagram.com/breannajwilson/",
+    handle: "@breannawilson",
+    description: "Café, rutas y equipaje liviano para cada destino.",
+    role: "Fotógrafa outdoor.",
+    story: "Entre aeropuertos, rutas y senderos, encuentra en cada parada una forma simple de volver a empezar.",
+    profileUrl: "https://www.instagram.com/breannawilson/",
     images: [
       ["assets/ambassador-breanna-5.png", "Viajera con una Minipresso guardada en su mochila en un aeropuerto"],
       ["assets/ambassador-breanna-1.jpg", "Breanna disfrutando un café durante un viaje"],
@@ -651,31 +672,33 @@ const ambassadorProfiles = [
   {
     layout: "nicolette",
     name: "Nicolette",
-    handle: "@wacaco_official",
-    platform: "Instagram",
-    description: "Aventurera de montaña que convierte cada pausa al aire libre en un ritual de café.",
-    profileUrl: "https://www.instagram.com/wacaco_official/",
-    images: [
-      ["assets/ambassador-nicolette-vertical.jpg", "Nicolette con una Minipresso en la montaña"],
-      ["assets/ambassador-nicolette-6.jpg", "Nicolette preparando espresso bajo la luz del sol"],
-      ["assets/ambassador-nicolette-2.jpg", "Pausa de café junto a un bosque"],
+    handle: "@nicolettetravel",
+    description: "Pausas cálidas entre montañas, nieve y senderos.",
+    role: "Exploradora de montaña.",
+    story: "Sus recorridos combinan nieve, altura y momentos tranquilos donde el paisaje marca el ritmo.",
+    profileUrl: "https://www.instagram.com/nicolettetravel/",
+      images: [
+        ["assets/ambassador-nicolette-vertical.jpg", "Nicolette con una Minipresso en la montaña"],
+        ["assets/ambassador-nicolette-2.jpg", "Pausa de café junto a un bosque"],
       ["assets/ambassador-nicolette-3.jpg", "Café en una cumbre nevada"],
       ["assets/ambassador-nicolette-4.jpg", "Preparación de espresso en el bosque"],
       ["assets/ambassador-nicolette-5.jpg", "Nicolette en un paisaje de nieve"],
+      ["assets/ambassador-nicolette-6.jpg", "Nicolette preparando espresso bajo la luz del sol"],
     ],
   },
   {
     layout: "vissers",
     name: "Vissers",
-    handle: "@brodievissers",
-    platform: "YouTube",
-    description: "Filmmaker y barista nómada que explora culturas del café alrededor del mundo.",
-    profileUrl: "https://www.youtube.com/@BrodieVissers",
+    handle: "@vissers",
+    description: "Del origen del grano al espresso en viaje.",
+    role: "Explorador del origen.",
+    story: "Del grano al paisaje, conecta cada preparación con el lugar donde empieza la historia.",
+    profileUrl: "https://www.instagram.com/vissers/",
     images: [
       ["assets/ambassador-vissers-vertical.jpg", "Viajero tomando café frente a un paisaje abierto"],
-      ["assets/ambassador-vissers-3.png", "Preparación de café sobre una montaña"],
       ["assets/ambassador-vissers-1.png", "Brodie Vissers en una plantación de café"],
       ["assets/ambassador-vissers-2.jpg", "Fotógrafo explorando un paisaje rocoso"],
+      ["assets/ambassador-vissers-3.png", "Preparación de café sobre una montaña"],
       ["assets/ambassador-vissers-4.jpg", "Extracción de espresso con Minipresso"],
     ],
   },
@@ -684,6 +707,8 @@ const ambassadorProfiles = [
 const ambassadorDisplayOrder = [2, 3, 1, 0];
 
 let activeAmbassador = 0;
+let activeAmbassadorImage = 0;
+let ambassadorModalTrigger;
 let ambassadorTransitionTimer;
 
 const renderAmbassador = (index) => {
@@ -693,31 +718,66 @@ const renderAmbassador = (index) => {
 
   const ambassador = ambassadorProfiles[ambassadorDisplayOrder[index]];
   ambassadorGallery.dataset.layout = ambassador.layout;
-  ambassadorGallery.innerHTML = ambassador.images.map(([src, alt]) => `
-    <article class="ambassador-photo" tabindex="0">
+  ambassadorGallery.innerHTML = ambassador.images.map(([src, alt], imageIndex) => `
+    <button class="ambassador-photo" type="button" data-ambassador-photo-index="${imageIndex}" aria-label="Conocer la historia de ${ambassador.name}, imagen ${imageIndex + 1}">
       <img src="${src}" alt="${alt}" loading="lazy" decoding="async">
-      <div class="ambassador-photo-info">
-        <h3>${ambassador.name}</h3>
-        <p class="ambassador-meta">${ambassador.platform} &middot; ${ambassador.handle}</p>
-        <p class="ambassador-description">${ambassador.description}</p>
-        <a class="ambassador-profile-link" href="${ambassador.profileUrl}" target="_blank" rel="noopener noreferrer">Ver perfil</a>
-      </div>
-    </article>
+      <span class="ambassador-photo-action">Conocer historia</span>
+    </button>
   `).join("");
 
-  ambassadorGallery.querySelectorAll(".ambassador-photo").forEach((photo) => {
-    photo.addEventListener("click", (event) => {
-      if (desktopHoverQuery.matches || event.target.closest("a")) {
-        return;
-      }
+  ambassadorName.textContent = ambassador.name;
+  ambassadorHandle.textContent = ambassador.handle;
+  ambassadorDescription.textContent = ambassador.description;
+  ambassadorLink.href = ambassador.profileUrl;
+};
 
-      const wasVisible = photo.classList.contains("is-info-visible");
-      ambassadorGallery.querySelectorAll(".is-info-visible").forEach((item) => {
-        item.classList.remove("is-info-visible");
-      });
-      photo.classList.toggle("is-info-visible", !wasVisible);
-    });
-  });
+const getActiveAmbassadorProfile = () => ambassadorProfiles[ambassadorDisplayOrder[activeAmbassador]];
+
+const renderAmbassadorModal = () => {
+  const ambassador = getActiveAmbassadorProfile();
+  const [src, alt] = ambassador.images[activeAmbassadorImage];
+
+  ambassadorModalImage.src = src;
+  ambassadorModalImage.alt = alt;
+  ambassadorModalName.textContent = ambassador.name;
+  ambassadorModalHandle.textContent = ambassador.handle;
+  ambassadorModalRole.textContent = ambassador.role;
+  ambassadorModalStory.textContent = ambassador.story;
+  ambassadorModalLink.href = ambassador.profileUrl;
+  ambassadorModalDots.innerHTML = ambassador.images.map((_, imageIndex) => `
+    <button class="ambassador-modal-dot${imageIndex === activeAmbassadorImage ? " is-active" : ""}" type="button" data-ambassador-modal-index="${imageIndex}" aria-label="Ver imagen ${imageIndex + 1}" aria-current="${imageIndex === activeAmbassadorImage ? "true" : "false"}"></button>
+  `).join("");
+};
+
+const openAmbassadorModal = (imageIndex, trigger) => {
+  if (!ambassadorModal) {
+    return;
+  }
+
+  activeAmbassadorImage = imageIndex;
+  ambassadorModalTrigger = trigger;
+  renderAmbassadorModal();
+  ambassadorModal.classList.add("is-open");
+  ambassadorModal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("ambassador-modal-open");
+  ambassadorModal.querySelector(".ambassador-modal-close")?.focus();
+};
+
+const closeAmbassadorModal = () => {
+  if (!ambassadorModal?.classList.contains("is-open")) {
+    return;
+  }
+
+  ambassadorModal.classList.remove("is-open");
+  ambassadorModal.setAttribute("aria-hidden", "true");
+  document.body.classList.remove("ambassador-modal-open");
+  ambassadorModalTrigger?.focus();
+};
+
+const moveAmbassadorModal = (direction) => {
+  const imageCount = getActiveAmbassadorProfile().images.length;
+  activeAmbassadorImage = (activeAmbassadorImage + direction + imageCount) % imageCount;
+  renderAmbassadorModal();
 };
 
 const setActiveAmbassador = (index) => {
@@ -749,6 +809,35 @@ ambassadorPrev?.addEventListener("click", () => {
 
 ambassadorNext?.addEventListener("click", () => {
   setActiveAmbassador((activeAmbassador + 1) % ambassadorDisplayOrder.length);
+});
+
+ambassadorGallery?.addEventListener("click", (event) => {
+  const photo = event.target.closest("[data-ambassador-photo-index]");
+  if (photo) {
+    openAmbassadorModal(Number(photo.dataset.ambassadorPhotoIndex), photo);
+  }
+});
+
+ambassadorModalPrev?.addEventListener("click", () => moveAmbassadorModal(-1));
+ambassadorModalNext?.addEventListener("click", () => moveAmbassadorModal(1));
+ambassadorModalCloseButtons.forEach((button) => button.addEventListener("click", closeAmbassadorModal));
+
+ambassadorModalDots?.addEventListener("click", (event) => {
+  const dot = event.target.closest("[data-ambassador-modal-index]");
+  if (dot) {
+    activeAmbassadorImage = Number(dot.dataset.ambassadorModalIndex);
+    renderAmbassadorModal();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (!ambassadorModal?.classList.contains("is-open")) {
+    return;
+  }
+
+  if (event.key === "Escape") closeAmbassadorModal();
+  if (event.key === "ArrowLeft") moveAmbassadorModal(-1);
+  if (event.key === "ArrowRight") moveAmbassadorModal(1);
 });
 
 renderAmbassador(activeAmbassador);
