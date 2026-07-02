@@ -23,6 +23,7 @@ const benefitTabs = document.querySelectorAll("[data-benefit-index]");
 const benefitItems = document.querySelectorAll(".benefit-item");
 const benefitImage = document.querySelector(".benefit-image");
 const accessoryPanels = document.querySelectorAll("[data-accessory-panel]");
+const accessoryAccordion = document.querySelector(".accessory-accordion");
 const accessoryLinks = document.querySelectorAll("[data-accessory-link]");
 const explodedPieceIds = ["tapa", "contratapa", "filtro", "cuerpo", "piso"];
 const explodedHotspots = document.querySelectorAll("[data-exploded-hotspot]");
@@ -173,7 +174,10 @@ window.addEventListener("wheel", (event) => {
   }
 }, { passive: false });
 
+let activeAccessory = 0;
+
 const setActiveAccessory = (activeIndex) => {
+  activeAccessory = activeIndex;
   accessoryPanels.forEach((item, index) => {
     const isActive = index === activeIndex;
     item.classList.toggle("is-active", isActive);
@@ -182,6 +186,16 @@ const setActiveAccessory = (activeIndex) => {
 };
 
 accessoryPanels.forEach((panel, index) => {
+  const prevButton = document.createElement("button");
+  prevButton.className = "accessory-prev";
+  prevButton.type = "button";
+  prevButton.setAttribute("aria-label", "Ver accesorio anterior");
+  prevButton.innerHTML = `
+    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M19 12H5"></path>
+      <path d="m11 6-6 6 6 6"></path>
+    </svg>
+  `;
   const nextButton = document.createElement("button");
   nextButton.className = "accessory-next";
   nextButton.type = "button";
@@ -192,7 +206,7 @@ accessoryPanels.forEach((panel, index) => {
       <path d="m13 6 6 6-6 6"></path>
     </svg>
   `;
-  panel.appendChild(nextButton);
+  panel.append(prevButton, nextButton);
 
   panel.querySelector(".accessory-panel-trigger")?.addEventListener("click", () => {
     setActiveAccessory(index);
@@ -202,7 +216,32 @@ accessoryPanels.forEach((panel, index) => {
     event.stopPropagation();
     setActiveAccessory((index + 1) % accessoryPanels.length);
   });
+
+  prevButton.addEventListener("click", (event) => {
+    event.stopPropagation();
+    setActiveAccessory((index - 1 + accessoryPanels.length) % accessoryPanels.length);
+  });
 });
+
+let accessoryTouchStartX = 0;
+let accessoryTouchStartY = 0;
+
+accessoryAccordion?.addEventListener("touchstart", (event) => {
+  if (window.innerWidth > 768 || event.touches.length !== 1) return;
+  accessoryTouchStartX = event.touches[0].clientX;
+  accessoryTouchStartY = event.touches[0].clientY;
+}, { passive: true });
+
+accessoryAccordion?.addEventListener("touchend", (event) => {
+  if (window.innerWidth > 768 || !event.changedTouches.length) return;
+  const deltaX = event.changedTouches[0].clientX - accessoryTouchStartX;
+  const deltaY = event.changedTouches[0].clientY - accessoryTouchStartY;
+
+  if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY)) {
+    const direction = deltaX < 0 ? 1 : -1;
+    setActiveAccessory((activeAccessory + direction + accessoryPanels.length) % accessoryPanels.length);
+  }
+}, { passive: true });
 
 accessoryLinks.forEach((link) => {
   link.addEventListener("click", (event) => {
@@ -319,6 +358,7 @@ const updateEmotionalWindow = () => {
 
   const rect = emotionalSection.getBoundingClientRect();
   const transitionRect = emotionalTransition?.getBoundingClientRect();
+  const isMobileEmotional = window.matchMedia("(max-width: 768px)").matches;
   const isVisible =
     (rect.bottom > 0 && rect.top < window.innerHeight) ||
     Boolean(transitionRect && transitionRect.bottom > 0 && transitionRect.top < window.innerHeight);
@@ -328,17 +368,20 @@ const updateEmotionalWindow = () => {
   );
   const exitProgress = Math.min(
     1,
-    Math.max(0, (window.innerHeight * 1.18 - rect.bottom) / window.innerHeight)
+    Math.max(
+      0,
+      (window.innerHeight * (isMobileEmotional ? 0.72 : 1.18) - rect.bottom) / window.innerHeight
+    )
   );
   const caption = emotionalSection.querySelector(".full-bleed-caption p");
 
   document.body.classList.toggle("emotional-active", isVisible);
   emotionalIntro?.classList.toggle("is-visible", progress > 0.08);
-  emotionalLineOne?.classList.toggle("is-visible", progress > 0.22);
-  emotionalLineTwo?.classList.toggle("is-visible", progress > 0.4);
+  emotionalLineOne?.classList.toggle("is-visible", progress > (isMobileEmotional ? 0.05 : 0.22));
+  emotionalLineTwo?.classList.toggle("is-visible", progress > (isMobileEmotional ? 0.18 : 0.4));
   caption?.style.setProperty(
     "--emotional-caption-y",
-    `${(exitProgress * window.innerHeight * 0.78).toFixed(2)}px`
+    `${(exitProgress * window.innerHeight * (isMobileEmotional ? 0.5 : 0.78)).toFixed(2)}px`
   );
 };
 
@@ -645,6 +688,7 @@ const ambassadorProfiles = [
     role: "Viajeros y amantes del café de especialidad.",
     story: "Recorren nuevos paisajes buscando sabores, encuentros y pequeñas pausas para compartir.",
     profileUrl: "https://www.instagram.com/amamoscafes/",
+    mobileImages: null,
     images: [
       ["assets/ambassador-amamos-5.png", "Pareja caminando hacia un lago entre montañas"],
       ["assets/ambassador-amamos-2.png", "Pareja de excursionistas junto a un lago de montaña"],
@@ -662,6 +706,10 @@ const ambassadorProfiles = [
     role: "Fotógrafa outdoor.",
     story: "Entre aeropuertos, rutas y senderos, encuentra en cada parada una forma simple de volver a empezar.",
     profileUrl: "https://www.instagram.com/breannawilson/",
+    mobileImages: [
+      ["assets/ambassador-breanna-4.jpg", "Breanna Wilson con café frente a un paisaje abierto"],
+      ["assets/ambassador-breanna-5.jpg", "Breanna Wilson preparando café junto a un ave en la montaña"],
+    ],
     images: [
       ["assets/ambassador-breanna-5.png", "Viajera con una Minipresso guardada en su mochila en un aeropuerto"],
       ["assets/ambassador-breanna-1.jpg", "Breanna disfrutando un café durante un viaje"],
@@ -677,6 +725,7 @@ const ambassadorProfiles = [
     role: "Exploradora de montaña.",
     story: "Sus recorridos combinan nieve, altura y momentos tranquilos donde el paisaje marca el ritmo.",
     profileUrl: "https://www.instagram.com/nicolettetravel/",
+    mobileImages: null,
       images: [
         ["assets/ambassador-nicolette-vertical.jpg", "Nicolette con una Minipresso en la montaña"],
         ["assets/ambassador-nicolette-2.jpg", "Pausa de café junto a un bosque"],
@@ -694,6 +743,10 @@ const ambassadorProfiles = [
     role: "Explorador del origen.",
     story: "Del grano al paisaje, conecta cada preparación con el lugar donde empieza la historia.",
     profileUrl: "https://www.instagram.com/vissers/",
+    mobileImages: [
+      ["assets/ambassador-vissers-5.jpg", "Vissers explorando nuevas formas de preparar café"],
+      ["assets/ambassador-vissers-6.jpg", "Vissers con Minipresso durante un recorrido urbano"],
+    ],
     images: [
       ["assets/ambassador-vissers-vertical.jpg", "Viajero tomando café frente a un paisaje abierto"],
       ["assets/ambassador-vissers-1.png", "Brodie Vissers en una plantación de café"],
@@ -710,6 +763,18 @@ let activeAmbassador = 0;
 let activeAmbassadorImage = 0;
 let ambassadorModalTrigger;
 let ambassadorTransitionTimer;
+let ambassadorTouchStartX = 0;
+let ambassadorTouchStartY = 0;
+let ambassadorSwipeHandled = false;
+const ambassadorMobileQuery = window.matchMedia("(max-width: 768px)");
+
+const getAmbassadorImages = (ambassador) => {
+  if (!ambassadorMobileQuery.matches || !ambassador.mobileImages?.length) {
+    return ambassador.images;
+  }
+
+  return [...ambassador.mobileImages, ...ambassador.images];
+};
 
 const renderAmbassador = (index) => {
   if (!ambassadorGallery) {
@@ -717,8 +782,11 @@ const renderAmbassador = (index) => {
   }
 
   const ambassador = ambassadorProfiles[ambassadorDisplayOrder[index]];
+  const renderedImages = ambassadorMobileQuery.matches
+    ? [getAmbassadorImages(ambassador)[0]]
+    : ambassador.images;
   ambassadorGallery.dataset.layout = ambassador.layout;
-  ambassadorGallery.innerHTML = ambassador.images.map(([src, alt], imageIndex) => `
+  ambassadorGallery.innerHTML = renderedImages.map(([src, alt], imageIndex) => `
     <button class="ambassador-photo" type="button" data-ambassador-photo-index="${imageIndex}" aria-label="Conocer la historia de ${ambassador.name}, imagen ${imageIndex + 1}">
       <img src="${src}" alt="${alt}" loading="lazy" decoding="async">
       <span class="ambassador-photo-action">Conocer historia</span>
@@ -735,7 +803,8 @@ const getActiveAmbassadorProfile = () => ambassadorProfiles[ambassadorDisplayOrd
 
 const renderAmbassadorModal = () => {
   const ambassador = getActiveAmbassadorProfile();
-  const [src, alt] = ambassador.images[activeAmbassadorImage];
+  const modalImages = getAmbassadorImages(ambassador);
+  const [src, alt] = modalImages[activeAmbassadorImage];
 
   ambassadorModalImage.src = src;
   ambassadorModalImage.alt = alt;
@@ -744,7 +813,7 @@ const renderAmbassadorModal = () => {
   ambassadorModalRole.textContent = ambassador.role;
   ambassadorModalStory.textContent = ambassador.story;
   ambassadorModalLink.href = ambassador.profileUrl;
-  ambassadorModalDots.innerHTML = ambassador.images.map((_, imageIndex) => `
+  ambassadorModalDots.innerHTML = modalImages.map((_, imageIndex) => `
     <button class="ambassador-modal-dot${imageIndex === activeAmbassadorImage ? " is-active" : ""}" type="button" data-ambassador-modal-index="${imageIndex}" aria-label="Ver imagen ${imageIndex + 1}" aria-current="${imageIndex === activeAmbassadorImage ? "true" : "false"}"></button>
   `).join("");
 };
@@ -775,7 +844,7 @@ const closeAmbassadorModal = () => {
 };
 
 const moveAmbassadorModal = (direction) => {
-  const imageCount = getActiveAmbassadorProfile().images.length;
+  const imageCount = getAmbassadorImages(getActiveAmbassadorProfile()).length;
   activeAmbassadorImage = (activeAmbassadorImage + direction + imageCount) % imageCount;
   renderAmbassadorModal();
 };
@@ -812,11 +881,35 @@ ambassadorNext?.addEventListener("click", () => {
 });
 
 ambassadorGallery?.addEventListener("click", (event) => {
+  if (ambassadorSwipeHandled) {
+    ambassadorSwipeHandled = false;
+    return;
+  }
+
   const photo = event.target.closest("[data-ambassador-photo-index]");
   if (photo) {
     openAmbassadorModal(Number(photo.dataset.ambassadorPhotoIndex), photo);
   }
 });
+
+ambassadorGallery?.addEventListener("touchstart", (event) => {
+  if (!ambassadorMobileQuery.matches || event.touches.length !== 1) return;
+  ambassadorSwipeHandled = false;
+  ambassadorTouchStartX = event.touches[0].clientX;
+  ambassadorTouchStartY = event.touches[0].clientY;
+}, { passive: true });
+
+ambassadorGallery?.addEventListener("touchend", (event) => {
+  if (!ambassadorMobileQuery.matches || !event.changedTouches.length) return;
+  const deltaX = event.changedTouches[0].clientX - ambassadorTouchStartX;
+  const deltaY = event.changedTouches[0].clientY - ambassadorTouchStartY;
+
+  if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY)) {
+    ambassadorSwipeHandled = true;
+    const direction = deltaX < 0 ? 1 : -1;
+    setActiveAmbassador((activeAmbassador + direction + ambassadorDisplayOrder.length) % ambassadorDisplayOrder.length);
+  }
+}, { passive: true });
 
 ambassadorModalPrev?.addEventListener("click", () => moveAmbassadorModal(-1));
 ambassadorModalNext?.addEventListener("click", () => moveAmbassadorModal(1));
@@ -841,6 +934,7 @@ document.addEventListener("keydown", (event) => {
 });
 
 renderAmbassador(activeAmbassador);
+ambassadorMobileQuery.addEventListener("change", () => renderAmbassador(activeAmbassador));
 
 const updateHero = () => {
   heroScrollCue?.classList.toggle("is-hidden", window.scrollY > 8);
