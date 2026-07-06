@@ -2052,8 +2052,9 @@ body.emotional-active .fixed-emotional-bg {
   line-height: 1.55;
 }
 
-.accessory-panel-cta {
-  margin-top: 6px;
+.accessories .accessory-products-link {
+  margin-top: 28px;
+  color: var(--peach);
 }
 
 .accessory-next {
@@ -4157,16 +4158,6 @@ body.ambassador-modal-open {
     stroke: currentColor;
   }
 
-  .accessory-panel-cta {
-    background: var(--clay);
-    color: var(--paper);
-    font-size: 0;
-  }
-
-  .accessory-panel-cta::after {
-    content: "Conocer m\00e1s";
-    font-size: 0.88rem;
-  }
 }
 
 @media (max-width: 768px) {

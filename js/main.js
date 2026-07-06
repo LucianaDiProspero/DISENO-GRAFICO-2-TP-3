@@ -24,11 +24,9 @@ const benefitItems = document.querySelectorAll(".benefit-item");
 const benefitImage = document.querySelector(".benefit-image");
 const accessoryPanels = document.querySelectorAll("[data-accessory-panel]");
 const accessoryAccordion = document.querySelector(".accessory-accordion");
-const accessoryLinks = document.querySelectorAll("[data-accessory-link]");
 const explodedPieceIds = ["tapa", "contratapa", "filtro", "cuerpo", "piso"];
 const explodedHotspots = document.querySelectorAll("[data-exploded-hotspot]");
 const finalCta = document.querySelector(".final-cta");
-const accessoryProductUrl = "https://www.wacaco.com/products/minipresso-gr?srsltid=AfmBOorDPvngNIDBVf-H_lahJGFi0SnJkaCjnxM6dGQv4oc2yuUH7y0q";
 const newsletterForm = document.querySelector("[data-newsletter-form]");
 const newsletterStatus = document.querySelector("[data-newsletter-status]");
 const desktopHoverQuery = window.matchMedia("(hover: hover) and (pointer: fine)");
@@ -242,13 +240,6 @@ accessoryAccordion?.addEventListener("touchend", (event) => {
     setActiveAccessory((activeAccessory + direction + accessoryPanels.length) % accessoryPanels.length);
   }
 }, { passive: true });
-
-accessoryLinks.forEach((link) => {
-  link.addEventListener("click", (event) => {
-    event.stopPropagation();
-    window.location.href = accessoryProductUrl;
-  });
-});
 
 newsletterForm?.addEventListener("submit", (event) => {
   event.preventDefault();
