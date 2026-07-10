@@ -13,6 +13,16 @@
   --shadow-soft: 0 24px 70px rgba(36, 33, 25, 0.14);
 }
 
+@media (min-width: 992px) {
+  .reviews.ambassador-section {
+    padding-bottom: 40px;
+  }
+
+  .reviews.ambassador-section .ambassador-shell {
+    margin-bottom: -38px;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
@@ -2136,6 +2146,10 @@ body.emotional-active .fixed-emotional-bg {
   margin: 0 auto 58px;
 }
 
+.ambassador-eyebrow-desktop {
+  display: none;
+}
+
 .ambassador-heading .section-title span {
   color: var(--clay);
 }
@@ -2637,6 +2651,73 @@ body.ambassador-modal-open {
   width: 24px;
   height: 24px;
   stroke: currentColor;
+}
+
+@media (min-width: 992px) {
+  .ambassador-section {
+    padding-bottom: 0;
+  }
+
+  .ambassador-shell {
+    transform: translateY(-38px);
+  }
+
+  .ambassador-eyebrow-mobile {
+    display: none;
+  }
+
+  .ambassador-eyebrow-desktop {
+    display: inline;
+  }
+
+  .ambassador-gallery {
+    height: clamp(620px, 54vw, 820px);
+  }
+
+  .ambassador-gallery[data-layout="desktop-fixed"] .ambassador-photo:nth-child(1) { grid-area: 1 / 1 / 10 / 5; }
+  .ambassador-gallery[data-layout="desktop-fixed"] .ambassador-photo:nth-child(2) { grid-area: 1 / 5 / 6 / 10; }
+  .ambassador-gallery[data-layout="desktop-fixed"] .ambassador-photo:nth-child(3) { grid-area: 1 / 10 / 6 / 13; }
+  .ambassador-gallery[data-layout="desktop-fixed"] .ambassador-photo:nth-child(4) { grid-area: 6 / 5 / 10 / 8; }
+  .ambassador-gallery[data-layout="desktop-fixed"] .ambassador-photo:nth-child(5) { grid-area: 6 / 8 / 10 / 10; }
+  .ambassador-gallery[data-layout="desktop-fixed"] .ambassador-photo:nth-child(6) { grid-area: 6 / 10 / 10 / 13; }
+
+  .ambassador-gallery[data-layout="desktop-fixed"] .ambassador-photo-action {
+    width: 38px;
+    height: 38px;
+    margin: auto;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    color: var(--paper);
+    text-decoration: none;
+    transform: translateY(6px) scale(0.92);
+  }
+
+  .ambassador-expand-icon {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .ambassador-expand-bg {
+    fill: var(--ink);
+    opacity: 0.34;
+  }
+
+  .ambassador-expand-lines {
+    fill: var(--paper);
+  }
+
+  .ambassador-gallery[data-layout="desktop-fixed"] .ambassador-photo:is(:hover, :focus-visible) .ambassador-photo-action {
+    transform: translateY(0) scale(1);
+  }
+
+  .ambassador-dots,
+  .ambassador-profile,
+  .ambassador-arrow {
+    display: none;
+  }
 }
 
 .final-cta {
@@ -3798,7 +3879,7 @@ body.ambassador-modal-open {
   }
 
   .specs {
-    padding: 76px 0 100px;
+    padding: 76px 0 62px;
   }
 
   .specs > .container,
@@ -4071,7 +4152,7 @@ body.ambassador-modal-open {
   }
 
   .final-cta::after {
-    background: linear-gradient(180deg, rgba(18, 17, 12, 0.82) 0%, rgba(18, 17, 12, 0.48) 54%, rgba(18, 17, 12, 0.18) 100%);
+    background: none;
   }
 
   .site-footer {
@@ -4232,7 +4313,7 @@ body.ambassador-modal-open {
     height: auto;
     min-height: 0;
     margin-top: 38px;
-    padding: 24px 0 220px;
+    padding: 24px 0 38px;
     overflow: visible;
     background: var(--paper);
   }
@@ -4265,11 +4346,11 @@ body.ambassador-modal-open {
   }
 
   .spec-exploded.is-open .exploded-minipresso-mobile #tapa_vertical {
-    transform: translateY(-1180px);
+    transform: translateY(-1066px);
   }
 
   .spec-exploded.is-open .exploded-minipresso-mobile #contratapa_vertical {
-    transform: translateY(-534px);
+    transform: translateY(-382px);
   }
 
   .spec-exploded.is-open .exploded-minipresso-mobile #filtro_vertical {
@@ -4301,11 +4382,11 @@ body.ambassador-modal-open {
     z-index: 6;
   }
 
-  .hotspot-tapa { top: 7%; left: 58%; }
-  .hotspot-contratapa { top: 25%; left: 43%; }
+  .hotspot-tapa { top: calc(7% + 3cm); left: 58%; }
+  .hotspot-contratapa { top: calc(25% + 2cm); left: 43%; }
   .hotspot-filtro { top: 43%; left: 58%; }
   .hotspot-cuerpo { top: 63%; left: 43%; }
-  .hotspot-piso { top: 81%; left: 58%; }
+  .hotspot-piso { top: calc(81% + 1cm); left: 58%; }
 
   .exploded-note,
   .note-tapa,
@@ -4327,11 +4408,11 @@ body.ambassador-modal-open {
     z-index: 5;
   }
 
-  .note-tapa { top: calc(12% - 1cm); }
-  .note-contratapa { top: calc(30% - 1cm); }
+  .note-tapa { top: calc(12% + 2cm); }
+  .note-contratapa { top: calc(30% + 1cm); }
   .note-filtro { top: calc(48% - 1cm); }
   .note-cuerpo { top: calc(68% - 1cm); }
-  .note-piso { top: calc(86% - 1cm); }
+  .note-piso { top: 86%; }
 
   .exploded-note p:last-child {
     color: var(--stone);

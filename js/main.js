@@ -692,18 +692,19 @@ const ambassadorProfiles = [
   {
     layout: "breanna",
     name: "Breanna Wilson",
-    handle: "@breannawilson",
+    handle: "@breannajwilson",
     description: "Café, rutas y equipaje liviano para cada destino.",
     role: "Fotógrafa outdoor.",
     story: "Entre aeropuertos, rutas y senderos, encuentra en cada parada una forma simple de volver a empezar.",
-    profileUrl: "https://www.instagram.com/breannawilson/",
+    profileUrl: "https://www.instagram.com/breannajwilson",
     mobileImages: [
       ["assets/ambassador-breanna-4.jpg", "Breanna Wilson con café frente a un paisaje abierto"],
       ["assets/ambassador-breanna-5.jpg", "Breanna Wilson preparando café junto a un ave en la montaña"],
     ],
     images: [
-      ["assets/ambassador-breanna-5.png", "Viajera con una Minipresso guardada en su mochila en un aeropuerto"],
       ["assets/ambassador-breanna-1.jpg", "Breanna disfrutando un café durante un viaje"],
+      ["assets/ambassador-breanna-5.png", "Viajera con una Minipresso guardada en su mochila en un aeropuerto"],
+      
       ["assets/ambassador-breanna-2.jpg", "Minipresso y objetos preparados para viajar"],
       ["assets/ambassador-breanna-3.jpg", "Equipo de viaje y café guardado en una mochila"],
     ],
@@ -711,11 +712,11 @@ const ambassadorProfiles = [
   {
     layout: "nicolette",
     name: "Nicolette",
-    handle: "@nicolettetravel",
+    handle: "@n1c0l3t",
     description: "Pausas cálidas entre montañas, nieve y senderos.",
     role: "Exploradora de montaña.",
     story: "Sus recorridos combinan nieve, altura y momentos tranquilos donde el paisaje marca el ritmo.",
-    profileUrl: "https://www.instagram.com/nicolettetravel/",
+    profileUrl: "https://www.instagram.com/n1c0l3t/",
     mobileImages: null,
       images: [
         ["assets/ambassador-nicolette-vertical.jpg", "Nicolette con una Minipresso en la montaña"],
@@ -728,12 +729,12 @@ const ambassadorProfiles = [
   },
   {
     layout: "vissers",
-    name: "Vissers",
-    handle: "@vissers",
+    name: "Brodie Vissers",
+    handle: "@Brodievissers",
     description: "Del origen del grano al espresso en viaje.",
     role: "Explorador del origen.",
     story: "Del grano al paisaje, conecta cada preparación con el lugar donde empieza la historia.",
-    profileUrl: "https://www.instagram.com/vissers/",
+    profileUrl: "https://www.instagram.com/brodievissers/",
     mobileImages: [
       ["assets/ambassador-vissers-5.jpg", "Vissers explorando nuevas formas de preparar café"],
       ["assets/ambassador-vissers-6.jpg", "Vissers con Minipresso durante un recorrido urbano"],
@@ -746,9 +747,52 @@ const ambassadorProfiles = [
       ["assets/ambassador-vissers-4.jpg", "Extracción de espresso con Minipresso"],
     ],
   },
+  {
+    layout: "shorecreations",
+    name: "Shore creations",
+    displayName: "Shore<br>creations",
+    handle: "@shorecreations.content",
+    description: "Retrata pequeños rituales donde el café, el paisaje y el tiempo encuentran un equilibrio natural.",
+    role: "Rituales de café",
+    story: "Retrata pequeños rituales donde el café, el paisaje y el tiempo encuentran un equilibrio natural.",
+    profileUrl: "https://www.instagram.com/shorecreations.content/",
+    mobileImages: null,
+    images: [
+      ["assets/shorecreations.content2.jpg", "Pausa de café junto a un paisaje costero"],
+      ["assets/shorecreations.content1.jpg", "Shorecreations.content preparando café"],
+      
+      ["assets/shorecreations.content3.jpg", "Minipresso en una escena de viaje"],
+      ["assets/shorecreations.content4.jpg", "Momento de café al aire libre"],
+    ],
+  },
+  {
+    layout: "myhappycoffee",
+    name: "My Happy Coffee Moments",
+    handle: "@myhappycoffeemoments",
+    description: "Pequeñas pausas, café y momentos cálidos.",
+    role: "Café y naturaleza",
+    story: "Construye escenas cercanas donde cada preparación se vuelve una pausa amable dentro del día.",
+    profileUrl: "https://www.instagram.com/myhappycoffeemoments/",
+    mobileImages: null,
+    images: [
+            ["assets/myhappycoffeemoments5.jpg", "Momento de café compartido"],
+      ["assets/myhappycoffeemoments2.png", "Preparación de café en una escena cálida"],
+      ["assets/myhappycoffeemoments3.png", "Detalle de café y accesorios"],
+      ["assets/myhappycoffeemoments4.jpg", "Pausa de café en interior"],
+      ["assets/myhappycoffeemoments1.jpg", "My Happy Coffee Moments con Minipresso"],
+    ],
+  },
 ];
 
-const ambassadorDisplayOrder = [2, 3, 1, 0];
+const ambassadorDisplayOrder = [2, 3, 1, 0, 4, 5];
+const ambassadorDesktopMosaic = [
+  { profileIndex: 2, imageIndex: 0 },
+  { profileIndex: 3, imageIndex: 3 },
+  { profileIndex: 1, imageIndex: 0 },
+  { profileIndex: 0, imageIndex: 0 },
+  { profileIndex: 4, imageIndex: 0 },
+  { profileIndex: 5, imageIndex: 0 },
+];
 
 let activeAmbassador = 0;
 let activeAmbassadorImage = 0;
@@ -758,6 +802,7 @@ let ambassadorTouchStartX = 0;
 let ambassadorTouchStartY = 0;
 let ambassadorSwipeHandled = false;
 const ambassadorMobileQuery = window.matchMedia("(max-width: 768px)");
+const ambassadorDesktopQuery = window.matchMedia("(min-width: 992px)");
 
 const getAmbassadorImages = (ambassador) => {
   if (!ambassadorMobileQuery.matches || !ambassador.mobileImages?.length) {
@@ -769,6 +814,32 @@ const getAmbassadorImages = (ambassador) => {
 
 const renderAmbassador = (index) => {
   if (!ambassadorGallery) {
+    return;
+  }
+
+  if (ambassadorDesktopQuery.matches) {
+    ambassadorGallery.dataset.layout = "desktop-fixed";
+    ambassadorGallery.innerHTML = ambassadorDesktopMosaic.map(({ profileIndex, imageIndex }) => {
+      const ambassador = ambassadorProfiles[profileIndex];
+      const [src, alt] = ambassador.images[imageIndex];
+
+      return `
+        <button class="ambassador-photo" type="button" data-ambassador-profile-index="${profileIndex}" data-ambassador-photo-index="${imageIndex}" aria-label="Conocer la historia de ${ambassador.name}">
+          <img src="${src}" alt="${alt}" loading="lazy" decoding="async">
+          <span class="ambassador-photo-action" aria-hidden="true">
+            <svg class="ambassador-expand-icon" viewBox="0 0 351.3 351.28" focusable="false">
+              <g class="ambassador-expand-bg">
+                <path d="M337.73,291.68c0,25.53-20.7,46.23-46.23,46.23H57.09c-25.53,0-46.23-20.7-46.23-46.23V60.67c0-25.53,20.7-46.23,46.23-46.23h265.09c8.59,0,15.55,6.96,15.55,15.55v261.7Z"/>
+              </g>
+              <g class="ambassador-expand-lines">
+                <path d="M282.41,85.39l-12.28,12.13-129.24,128.99c-3.39,3.38-8.58,3.1-11.75.04s-3.63-8.49-.16-11.95l141.14-141.1-90.56-.06c-4.68,0-8.02-4.3-7.92-8.55s3.61-8.17,8.34-8.17h110.8c4.39,0,8.36,3.46,8.36,7.98l.03,112.12c0,4.76-3.81,8.25-8.18,8.35s-8.55-3.5-8.55-8.33l-.03-91.46Z"/>
+                <path d="M336.09.68H43.18C17.65.68-3.05,21.37-3.05,46.9v258.55c0,25.53,20.7,46.23,46.23,46.23h262.23c25.53,0,46.23-20.7,46.23-46.23V16.22c0-8.59-6.96-15.55-15.55-15.55ZM337.73,291.68c0,25.53-20.7,46.23-46.23,46.23H57.09c-25.53,0-46.23-20.7-46.23-46.23V60.67c0-25.53,20.7-46.23,46.23-46.23h265.09c8.59,0,15.55,6.96,15.55,15.55v261.7Z"/>
+              </g>
+            </svg>
+          </span>
+        </button>
+      `;
+    }).join("");
     return;
   }
 
@@ -799,7 +870,7 @@ const renderAmbassadorModal = () => {
 
   ambassadorModalImage.src = src;
   ambassadorModalImage.alt = alt;
-  ambassadorModalName.textContent = ambassador.name;
+  ambassadorModalName.innerHTML = ambassador.displayName || ambassador.name;
   ambassadorModalHandle.textContent = ambassador.handle;
   ambassadorModalRole.textContent = ambassador.role;
   ambassadorModalStory.textContent = ambassador.story;
@@ -809,9 +880,14 @@ const renderAmbassadorModal = () => {
   `).join("");
 };
 
-const openAmbassadorModal = (imageIndex, trigger) => {
+const openAmbassadorModal = (imageIndex, trigger, profileIndex) => {
   if (!ambassadorModal) {
     return;
+  }
+
+  if (profileIndex !== undefined) {
+    const displayIndex = ambassadorDisplayOrder.indexOf(profileIndex);
+    activeAmbassador = displayIndex >= 0 ? displayIndex : activeAmbassador;
   }
 
   activeAmbassadorImage = imageIndex;
@@ -879,7 +955,12 @@ ambassadorGallery?.addEventListener("click", (event) => {
 
   const photo = event.target.closest("[data-ambassador-photo-index]");
   if (photo) {
-    openAmbassadorModal(Number(photo.dataset.ambassadorPhotoIndex), photo);
+    const profileIndex = photo.dataset.ambassadorProfileIndex;
+    openAmbassadorModal(
+      Number(photo.dataset.ambassadorPhotoIndex),
+      photo,
+      profileIndex === undefined ? undefined : Number(profileIndex)
+    );
   }
 });
 
@@ -926,6 +1007,7 @@ document.addEventListener("keydown", (event) => {
 
 renderAmbassador(activeAmbassador);
 ambassadorMobileQuery.addEventListener("change", () => renderAmbassador(activeAmbassador));
+ambassadorDesktopQuery.addEventListener("change", () => renderAmbassador(activeAmbassador));
 
 const updateHero = () => {
   heroScrollCue?.classList.toggle("is-hidden", window.scrollY > 8);
@@ -938,3 +1020,7 @@ const updateHero = () => {
 updateHero();
 window.addEventListener("scroll", updateHero, { passive: true });
 window.addEventListener("resize", updateHero);
+
+
+
+
